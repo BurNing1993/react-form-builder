@@ -5,11 +5,11 @@ const LOCAL_THEME = 'theme'
 export function setLocalTheme(theme: Theme) {
     localStorage[LOCAL_THEME] = theme
     let darkThemeLink = document.querySelector('#theme-style') as HTMLLinkElement
-    if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        darkThemeLink.href = './antd.dark.min.css'
+    if (theme === 'dark' || ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        darkThemeLink.href = process.env.PUBLIC_URL + '/antd.dark.min.css'
         document.documentElement.classList.add('dark')
     } else {
-        darkThemeLink.href = './antd.min.css'
+        darkThemeLink.href = process.env.PUBLIC_URL + '/antd.min.css'
         document.documentElement.classList.remove('dark')
     }
 }
