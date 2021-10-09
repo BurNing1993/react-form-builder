@@ -11,8 +11,11 @@ const App: React.FC = () => {
         <Header />
         <Suspense fallback={<div>Loading</div>}>
           <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/f/:id' component={lazy(() => import('./pages/form'))} />
+            <Route path="/" exact component={Home} />
+            <Route
+              path="/f/:id"
+              component={lazy(() => import('./pages/form'))}
+            />
           </Switch>
         </Suspense>
       </BrowserRouter>
@@ -20,4 +23,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App;
+export default App
