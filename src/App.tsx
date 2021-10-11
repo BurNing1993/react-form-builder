@@ -9,6 +9,7 @@ const App: React.FC = () => {
     <RecoilRoot>
       <BrowserRouter>
         <Header />
+        {/* TODO  skeleton */}
         <Suspense fallback={<div>Loading</div>}>
           <Switch>
             <Route path="/" exact component={Home} />

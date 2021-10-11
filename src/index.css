@@ -2,3 +2,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#form-container {
+  height: calc(100vh - 40px);
+}
+
+#property-container .ant-tabs-tab > div {
+  width: 115px;
+  text-align: center;
+}
