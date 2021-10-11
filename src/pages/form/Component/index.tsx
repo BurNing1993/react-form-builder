@@ -13,7 +13,6 @@ const Component: React.FC = () => {
       {(provided, snapshot) => (
         <section
           ref={provided.innerRef}
-          style={{ backgroundColor: snapshot.isDraggingOver ? 'grey' : '' }}
           {...provided.droppableProps}
           className="w-80 border-r border-gray-500 p-2"
         >
@@ -31,27 +30,21 @@ const Component: React.FC = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        className="flex flex-col items-center cursor-pointer border border-transparent hover:border-gray-500"
                       >
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="flex flex-col items-center cursor-pointer border border-transparent hover:border-gray-500"
-                        >
-                          <div>{comp.label}</div>
-                          <img src={comp.img} alt={comp.label} />
-                          <div>
-                            <div>+</div>
-                          </div>
+                        <div>{comp.label}</div>
+                        <img src={comp.img} alt={comp.label} />
+                        <div>
+                          <div>+</div>
                         </div>
                       </div>
                     )}
-                    {provided.placeholder}
                   </Draggable>
                 ))}
               </div>
             </div>
           </Card>
+          {provided.placeholder}
         </section>
       )}
     </Droppable>
