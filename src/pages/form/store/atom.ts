@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
-import { CompProps } from './types'
+import { CompData } from './types'
 
-export const formCompDataListState = atom<CompProps[]>({
+export const formCompDataListState = atom<CompData[]>({
   key: 'formCompDataListState',
   default: [],
 })

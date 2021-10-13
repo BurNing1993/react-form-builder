@@ -1,4 +1,4 @@
-import { Card, Divider } from 'antd'
+import { Card } from 'antd'
 import React, { memo } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { formCompList, DROP_TYPE } from '../store/types'
@@ -31,27 +31,24 @@ const Component: React.FC = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        className="flex flex-col items-center p-2 cursor-move border border-transparent hover:border-gray-500"
                       >
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="flex flex-col items-center cursor-pointer border border-transparent hover:border-gray-500"
-                        >
-                          <div>{comp.label}</div>
-                          <img src={comp.img} alt={comp.label} />
-                          <div>
-                            <div>+</div>
-                          </div>
+                        <div>
+                          <div className="text-center">{comp.label}</div>
+                          {React.createElement(
+                            comp.component,
+                            comp.componentProps
+                          )}
                         </div>
+                        <div className="absolute top-0 left-0 w-full h-full opacity-50"></div>
                       </div>
                     )}
-                    {provided.placeholder}
                   </Draggable>
                 ))}
               </div>
             </div>
           </Card>
+          {provided.placeholder}
         </section>
       )}
     </Droppable>
