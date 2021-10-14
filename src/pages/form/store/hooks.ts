@@ -1,5 +1,6 @@
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { formCompDataListKeysState } from './selector'
+import { activeTabKeyState } from './atom'
 import { generateId } from '../../../utils'
 
 // 生成唯一form key
@@ -13,4 +14,9 @@ export function useUniqueFormDataKey() {
     return key
   }
   return generateUniqueFormDataKey
+}
+
+export function useSelectFormItem() {
+  const setActiveKey = useSetRecoilState(activeTabKeyState)
+  return setActiveKey
 }

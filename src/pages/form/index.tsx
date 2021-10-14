@@ -18,16 +18,19 @@ const FormPage: React.FC = () => {
       const { destination, source } = result
       if (destination) {
         if (destination.droppableId === source.droppableId) {
+          // TODO
           return
         }
         const data = formCompList[source.index]
         const dIndex = destination.index
+        const key = data.label + '_' + generateUniqueFormDataKey()
         setFormCompDataList((list) =>
           list
             .slice(0, dIndex)
             .concat({
               ...data,
-              key: data.label + '_' + generateUniqueFormDataKey(),
+              key,
+              name: key,
             })
             .concat(list.slice(dIndex))
         )

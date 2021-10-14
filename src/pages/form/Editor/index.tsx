@@ -1,14 +1,14 @@
 import React, { memo } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { Form } from 'antd'
 import { DROP_TYPE } from '../store/types'
-import { formCompDataListState } from '../store/atom'
+import { formCompDataListState, formPropsState } from '../store/atom'
 
 const Editor: React.FC = () => {
-  const [formCompDataList, setFormCompDataList] = useRecoilState(
-    formCompDataListState
-  )
+  const formCompDataList = useRecoilValue(formCompDataListState)
+  const formProps = useRecoilValue(formPropsState)
+
   return (
     <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
       {(provided, snapshot) => (
@@ -18,10 +18,10 @@ const Editor: React.FC = () => {
           {...provided.droppableProps}
           className="flex-1 p-2"
         >
-          <Form>
+          <Form {...formProps}>
             {formCompDataList.map((comp, index) => (
               <Draggable
-                key={comp.label}
+                key={comp.key}
                 draggableId={'draggable_editor_' + comp.key}
                 index={index}
               >
@@ -30,8 +30,12 @@ const Editor: React.FC = () => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
+                    onClick={() => {
+                      console.log(comp)
+                      // TODO
+                    }}
                   >
-                    <Form.Item label={comp.label}>
+                    <Form.Item label={comp.label} name={comp.name}>
                       {React.createElement(comp.component)}
                     </Form.Item>
                   </div>

@@ -31,9 +31,9 @@ const Component: React.FC = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="flex flex-col items-center p-2 cursor-move border border-transparent hover:border-gray-500"
+                        className="p-2 border border-transparent hover:border-gray-500"
                       >
-                        <div>
+                        <div className="flex items-center">
                           <div className="text-center">{comp.label}</div>
                           {React.createElement(
                             comp.component,
