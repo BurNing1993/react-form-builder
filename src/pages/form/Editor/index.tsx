@@ -4,10 +4,12 @@ import { useRecoilValue } from 'recoil'
 import { Form } from 'antd'
 import { DROP_TYPE } from '../store/types'
 import { formCompDataListState, formPropsState } from '../store/atom'
+import { useSelectFormItem } from '../store/hooks'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
   const formProps = useRecoilValue(formPropsState)
+  const onSelectFormItem = useSelectFormItem()
 
   return (
     <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
@@ -18,6 +20,7 @@ const Editor: React.FC = () => {
           {...provided.droppableProps}
           className="flex-1 p-2"
         >
+          {/* TODO default Value */}
           <Form {...formProps}>
             {formCompDataList.map((comp, index) => (
               <Draggable
@@ -31,12 +34,11 @@ const Editor: React.FC = () => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     onClick={() => {
-                      console.log(comp)
-                      // TODO
+                      onSelectFormItem(index)
                     }}
                   >
                     <Form.Item label={comp.label} name={comp.name}>
-                      {React.createElement(comp.component)}
+                      {React.createElement(comp.component, comp.componentProps)}
                     </Form.Item>
                   </div>
                 )}

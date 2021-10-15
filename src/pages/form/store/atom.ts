@@ -7,6 +7,7 @@ export const formCompDataListState = atom<CompData[]>({
   default: [],
 })
 
+// form props
 export const formPropsState = atom<FormProps>({
   key: 'formCompDataList',
   default: {
@@ -15,7 +16,14 @@ export const formPropsState = atom<FormProps>({
   },
 })
 
+// tab
 export const activeTabKeyState = atom<string>({
   key: 'activeTabKey',
   default: '1',
+})
+
+// form item props
+export const activeFormItemIndexState = atom<number>({
+  key: 'activeFormItemIndexState',
+  default: -1,
 })

@@ -1,6 +1,7 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useSetRecoilState } from 'recoil'
+import { useParams } from 'react-router-dom'
 import Component from './Component'
 import Editor from './Editor'
 import Property from './Property'
@@ -11,6 +12,22 @@ import { formCompList } from './store/types'
 const FormPage: React.FC = () => {
   const setFormCompDataList = useSetRecoilState(formCompDataListState)
   const generateUniqueFormDataKey = useUniqueFormDataKey()
+  const params = useParams<{ id: string }>()
+
+  useEffect(() => {
+    console.log('enter page param:id=', params.id)
+  }, [params])
+
+  // TODO
+  // useEffect(() => {
+  //   const onBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     console.log(e, 'onBeforeunload');
+  //     e.preventDefault()
+  //     e.returnValue = 'R U OK?'
+  //   }
+  //   window.addEventListener('beforeunload', onBeforeUnload)
+  //   return () => window.removeEventListener('beforeunload', onBeforeUnload)
+  // }, [])
 
   const onDragEnd = useCallback(
     (result: DropResult) => {

@@ -1,7 +1,12 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { formCompDataListKeysState } from './selector'
-import { activeTabKeyState } from './atom'
+import {
+  activeTabKeyState,
+  activeFormItemIndexState,
+  formCompDataListState,
+} from './atom'
 import { generateId } from '../../../utils'
+import { CompData } from './types'
 
 // 生成唯一form key
 export function useUniqueFormDataKey() {
@@ -17,6 +22,32 @@ export function useUniqueFormDataKey() {
 }
 
 export function useSelectFormItem() {
-  const setActiveKey = useSetRecoilState(activeTabKeyState)
-  return setActiveKey
+  const [activeKey, setActiveKey] = useRecoilState(activeTabKeyState)
+  const setActiveFormItemIndex = useSetRecoilState(activeFormItemIndexState)
+  const onSelectFormItem = (index: number) => {
+    if (activeKey !== '2') {
+      setActiveKey('2')
+    }
+    setActiveFormItemIndex(index)
+  }
+  return onSelectFormItem
+}
+
+export function useUpdateFormItemProps() {
+  const activeIndex = useRecoilValue(activeFormItemIndexState)
+  const setFormCompDataList = useSetRecoilState(formCompDataListState)
+  const onUpdateFormProps = (data: Partial<CompData>) => {
+    setFormCompDataList((list) => {
+      const activeData = list[activeIndex]
+      const newData = {
+        ...activeData,
+        ...data,
+      }
+      return list
+        .slice(0, activeIndex)
+        .concat(newData)
+        .concat(list.slice(activeIndex + 1))
+    })
+  }
+  return onUpdateFormProps
 }
