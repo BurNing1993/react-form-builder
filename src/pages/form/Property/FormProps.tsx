@@ -1,41 +1,41 @@
 import React, { memo } from 'react'
 import { useRecoilState } from 'recoil'
-import { Form, Select } from 'antd'
+import { Form, Radio, Switch } from 'antd'
 import { formPropsState } from '../store/atom'
-import { FormLayout } from 'antd/lib/form/Form'
-
-const { Option } = Select
-
-const sizeOptions = ['large', 'middle', 'small']
-const layoutOptions: FormLayout[] = ['horizontal', 'inline', 'vertical']
 
 const FormProps: React.FC = () => {
   const [formProps, setFormProps] = useRecoilState(formPropsState)
   return (
     <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
       <Form.Item label="Size">
-        <Select
+        <Radio.Group
           value={formProps.size}
-          onChange={(size) => setFormProps({ ...formProps, size })}
+          onChange={(e) => setFormProps({ ...formProps, size: e.target.value })}
         >
-          {sizeOptions.map((s) => (
-            <Option key={s} value={s}>
-              {s}
-            </Option>
-          ))}
-        </Select>
+          <Radio.Button value="large">Large</Radio.Button>
+          <Radio.Button value="middle">Middle</Radio.Button>
+          <Radio.Button value="small">Small</Radio.Button>
+        </Radio.Group>
       </Form.Item>
       <Form.Item label="Layout">
-        <Select
+        <Radio.Group
           value={formProps.layout}
-          onChange={(layout) => setFormProps({ ...formProps, layout })}
+          onChange={(e) =>
+            setFormProps({ ...formProps, layout: e.target.value })
+          }
         >
-          {layoutOptions.map((l) => (
-            <Option key={l} value={l}>
-              {l}
-            </Option>
-          ))}
-        </Select>
+          <Radio.Button value="horizontal">Horizontal</Radio.Button>
+          <Radio.Button value="vertical">Vertical</Radio.Button>
+          <Radio.Button value="inline">Inline</Radio.Button>
+        </Radio.Group>
+      </Form.Item>
+      <Form.Item label="Submit">
+        <Switch
+          checked={formProps.showSubmitButton}
+          onChange={(checked) =>
+            setFormProps({ ...formProps, showSubmitButton: checked })
+          }
+        ></Switch>
       </Form.Item>
     </Form>
   )

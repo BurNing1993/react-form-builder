@@ -1,8 +1,11 @@
 import React, { memo } from 'react'
-import { Empty, Form, Card, Input, Checkbox } from 'antd'
+import { Empty, Form, Card, Input, Checkbox, Divider, Select } from 'antd'
 import { useRecoilValue } from 'recoil'
 import { activeFormItemState } from '../store/selector'
 import { useUpdateFormItemProps } from '../store/hooks'
+import { ruleTypes } from '../store/types'
+
+const { Option } = Select
 
 const CompProps: React.FC = () => {
   const activeFormItem = useRecoilValue(activeFormItemState)
@@ -20,12 +23,12 @@ const CompProps: React.FC = () => {
                 }
               />
             </Form.Item>
-            <Form.Item label="name" tooltip="提交时Key值">
+            <Form.Item label="name" tooltip="提交时Key值" required>
               <Input
                 value={activeFormItem.name}
-                onChange={(e) =>
+                onChange={(e) => {
                   onUpdateFormItemProps({ name: e.target.value })
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="defaultValue">
@@ -36,12 +39,31 @@ const CompProps: React.FC = () => {
                 }
               />
             </Form.Item>
-            <Form.Item label="校验">
+            {/* TODO Form.List onValuesChange*/}
+            <Divider>校验</Divider>
+            <Form.Item label="必填">
               <Checkbox>必填</Checkbox>
             </Form.Item>
-            <Form.Item label></Form.Item>
+            <Form.Item label="提示1" tooltip="必填自定义提示">
+              <Input placeholder="" />
+            </Form.Item>
+            <Form.Item label="类型">
+              <Select allowClear>
+                {ruleTypes.map((t) => (
+                  <Option key={t} value={t}>
+                    {t}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="正则" rules={[{ type: 'regexp' }]}>
+              <Input placeholder="" />
+            </Form.Item>
+            <Form.Item label="提示2" tooltip="正则提示">
+              <Input placeholder="" />
+            </Form.Item>
           </Card>
-          <Card size="small" title="CompProps">
+          <Card size="small" title="CompProps" className="mt-2">
             <Form.Item label="placeholder">
               <Input value={activeFormItem.componentProps?.placeholder} />
             </Form.Item>

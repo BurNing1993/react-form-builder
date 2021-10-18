@@ -1,16 +1,19 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { useParams } from 'react-router-dom'
 import Component from './Component'
 import Editor from './Editor'
 import Property from './Property'
-import { formCompDataListState } from './store/atom'
+import { formCompDataListState, activeFormItemIndexState } from './store/atom'
 import { useUniqueFormDataKey } from './store/hooks'
 import { formCompList } from './store/types'
 
 const FormPage: React.FC = () => {
   const setFormCompDataList = useSetRecoilState(formCompDataListState)
+  const [activeFormItemIndex, setActiveFormItemIndex] = useRecoilState(
+    activeFormItemIndexState
+  )
   const generateUniqueFormDataKey = useUniqueFormDataKey()
   const params = useParams<{ id: string }>()
 
@@ -35,7 +38,28 @@ const FormPage: React.FC = () => {
       const { destination, source } = result
       if (destination) {
         if (destination.droppableId === source.droppableId) {
-          // TODO
+          const dIndex = destination.index
+          const sIndex = source.index
+          if (activeFormItemIndex === sIndex) {
+            setActiveFormItemIndex(dIndex)
+          }
+          if (sIndex > dIndex) {
+            setFormCompDataList((list) =>
+              list
+                .slice(0, dIndex)
+                .concat(list[sIndex])
+                .concat(list.slice(dIndex, sIndex))
+                .concat(list.slice(sIndex + 1))
+            )
+          } else if (sIndex < dIndex) {
+            setFormCompDataList((list) =>
+              list
+                .slice(0, sIndex)
+                .concat(list.slice(sIndex + 1, dIndex + 1))
+                .concat(list[sIndex])
+                .concat(list.slice(dIndex + 1))
+            )
+          }
           return
         }
         const data = formCompList[source.index]
@@ -51,9 +75,15 @@ const FormPage: React.FC = () => {
             })
             .concat(list.slice(dIndex))
         )
+        setActiveFormItemIndex(dIndex)
       }
     },
-    [generateUniqueFormDataKey, setFormCompDataList]
+    [
+      activeFormItemIndex,
+      generateUniqueFormDataKey,
+      setActiveFormItemIndex,
+      setFormCompDataList,
+    ]
   )
 
   return (
