@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { FormProps } from 'antd'
-import { CompData } from './types'
+import { CompData, ExtraFormProps } from './types'
 
 export const formCompDataListState = atom<CompData[]>({
   key: 'formCompDataListState',
@@ -8,11 +8,14 @@ export const formCompDataListState = atom<CompData[]>({
 })
 
 // form props
-export const formPropsState = atom<FormProps>({
+export const formPropsState = atom<FormProps & ExtraFormProps>({
   key: 'formCompDataList',
   default: {
     size: 'middle',
     layout: 'horizontal',
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
+    showSubmitButton: false,
   },
 })
 
