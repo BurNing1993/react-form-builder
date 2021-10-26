@@ -1,44 +1,46 @@
 import React, { memo, useState } from 'react'
 import { Button, Modal } from 'antd'
 import MonacoEditor from 'react-monaco-editor'
+import { useRecoilValue } from 'recoil'
+import { formCompDataJSONCodeState } from '../store/selector'
+import { formPropsState } from '../store/atom'
 
 const CodeModal: React.FC = () => {
+  const JSONCode = useRecoilValue(formCompDataJSONCodeState)
+  const formProps = useRecoilValue(formPropsState)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [code] = useState(`// type your code... \n`)
-
   const showModal = () => {
     setIsModalVisible(true)
   }
-
-  const handleOk = () => {
+  const handleCancel = () => {
     setIsModalVisible(false)
   }
-
-  const handleCancel = () => {
+  const handleOk = () => {
     setIsModalVisible(false)
   }
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Open Modal
+        Code
       </Button>
       <Modal
-        title="Basic Modal"
+        title={formProps.formName}
         width="900px"
         visible={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
+        okText="export JSON"
+        onOk={handleOk}
       >
         <MonacoEditor
           width="800"
           height="600"
-          language="javascript"
+          language="json"
           theme="vs-dark"
-          value={code}
+          value={JSONCode}
           options={{
             selectOnLineNumbers: true,
             roundedSelection: false,
-            readOnly: false,
+            readOnly: true,
             cursorStyle: 'line',
             automaticLayout: false,
           }}

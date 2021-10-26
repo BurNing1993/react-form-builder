@@ -33,12 +33,9 @@ const Component: React.FC = () => {
                         {...provided.dragHandleProps}
                         className="p-2 border border-transparent hover:border-gray-500"
                       >
-                        <div className="flex items-center">
+                        <div className="flex justify-around items-center">
+                          {React.createElement(comp.icon)}
                           <div className="text-center">{comp.label}</div>
-                          {React.createElement(
-                            comp.component,
-                            comp.componentProps
-                          )}
                         </div>
                         <div className="absolute top-0 left-0 w-full h-full opacity-50"></div>
                       </div>
