@@ -9,6 +9,7 @@ import {
   activeFormItemIndexState,
 } from '../store/atom'
 import { useSelectFormItem } from '../store/hooks'
+import CodeModal from './CodeModal'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
@@ -25,7 +26,9 @@ const Editor: React.FC = () => {
 
   return (
     <section className="flex-1">
-      <div className="h-10 p-2 border-b border-gray-500">TODO</div>
+      <div className="h-10 p-2 border-b border-gray-500">
+        <CodeModal />
+      </div>
       <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
         {(provided, snapshot) => (
           <div
