@@ -19,3 +19,19 @@ export function generateId(n = 6) {
 export function randomInt(max: number, min = 0) {
   return Math.ceil(Math.random() * (max - min)) + min
 }
+
+/**
+ * 下载blob文件
+ * @param blob
+ * @param fileName
+ */
+export function downloadBlob(blob: Blob, fileName: string) {
+  const blobUrl = window.URL.createObjectURL(blob)
+  const downloadLink = document.createElement('a')
+  downloadLink.download = fileName
+  downloadLink.style.display = 'none'
+  downloadLink.href = blobUrl
+  document.body.appendChild(downloadLink)
+  downloadLink.click()
+  document.body.removeChild(downloadLink)
+}

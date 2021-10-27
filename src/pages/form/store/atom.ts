@@ -17,7 +17,7 @@ export const formPropsState = atom<FormProps & ExtraFormProps>({
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
     showSubmitButton: false,
-    formName: 'Form_' + generateId(),
+    formTitle: 'Form' + generateId(),
   },
 })
 

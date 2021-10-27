@@ -1,20 +1,23 @@
 import React, { memo } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { useRecoilValue } from 'recoil'
-import { Button, Form, notification } from 'antd'
+import { Button, Form, notification, Space } from 'antd'
 import { DROP_TYPE } from '../store/types'
 import {
   formCompDataListState,
   formPropsState,
   activeFormItemIndexState,
 } from '../store/atom'
+import { formInitialValuesState } from '../store/selector'
 import { useSelectFormItem } from '../store/hooks'
 import CodeModal from './CodeModal'
+import JSONModal from './JSONModal'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
   const activeFormItemIndex = useRecoilValue(activeFormItemIndexState)
   const formProps = useRecoilValue(formPropsState)
+  const initialValues = useRecoilValue(formInitialValuesState)
   const onSelectFormItem = useSelectFormItem()
   const onFinish = (values: any) => {
     console.log('Success:', values)
@@ -26,9 +29,10 @@ const Editor: React.FC = () => {
 
   return (
     <section className="flex-1">
-      <div className="h-10 p-2 border-b border-gray-500">
+      <Space className="h-10 w-full px-2 border-b border-gray-500">
         <CodeModal />
-      </div>
+        <JSONModal />
+      </Space>
       <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
         {(provided, snapshot) => (
           <div
@@ -38,8 +42,11 @@ const Editor: React.FC = () => {
             className="p-2"
             id="droppable-editor"
           >
-            {/* TODO default Value */}
-            <Form {...formProps} onFinish={onFinish}>
+            <Form
+              {...formProps}
+              initialValues={initialValues}
+              onFinish={onFinish}
+            >
               {formCompDataList.map((comp, index) => (
                 <Draggable
                   key={comp.key}

@@ -1,17 +1,16 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Button, Modal } from 'antd'
 import MonacoEditor from 'react-monaco-editor'
-import { useRecoilValue } from 'recoil'
-import { formPropsState } from '../store/atom'
-import { formDataReactCodeState } from '../store/selector'
-import { downloadBlob } from '../../../utils'
 import { DownloadOutlined } from '@ant-design/icons'
+import { useRecoilValue } from 'recoil'
+import { formCompDataJSONCodeState } from '../store/selector'
+import { formPropsState } from '../store/atom'
+import { downloadBlob } from '../../../utils'
 
 const JSONModal: React.FC = () => {
+  const JSONCode = useRecoilValue(formCompDataJSONCodeState)
   const formProps = useRecoilValue(formPropsState)
-  const formDataReactCode = useRecoilValue(formDataReactCodeState)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [code, setCode] = useState('')
   const showModal = () => {
     setIsModalVisible(true)
   }
@@ -19,13 +18,10 @@ const JSONModal: React.FC = () => {
     setIsModalVisible(false)
   }
   const handleOk = () => {
-    const blob = new Blob([code], { type: 'application/json	' })
-    downloadBlob(blob, `${formProps.formTitle}.jsx`)
+    const blob = new Blob([JSONCode], { type: 'application/json	' })
+    downloadBlob(blob, `${formProps.formTitle}.json`)
     setIsModalVisible(false)
   }
-  useEffect(() => {
-    setCode(formDataReactCode)
-  }, [formDataReactCode])
   return (
     <>
       <Button
@@ -34,27 +30,26 @@ const JSONModal: React.FC = () => {
         size="middle"
         icon={<DownloadOutlined />}
       >
-        Code
+        JSON
       </Button>
       <Modal
-        title={formProps.formTitle + '.jsx'}
+        title={formProps.formTitle + '.json'}
         width="900px"
         visible={isModalVisible}
         onCancel={handleCancel}
-        okText={'export ' + formProps.formTitle + '.jsx'}
+        okText="export JSON"
         onOk={handleOk}
       >
         <MonacoEditor
           width="800"
           height="600"
-          language="javascript"
+          language="json"
           theme="vs-dark"
-          value={code}
-          onChange={setCode}
+          value={JSONCode}
           options={{
             selectOnLineNumbers: true,
             roundedSelection: false,
-            readOnly: false,
+            readOnly: true,
             cursorStyle: 'line',
             automaticLayout: false,
           }}
