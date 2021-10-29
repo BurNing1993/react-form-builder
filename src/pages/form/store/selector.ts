@@ -58,7 +58,7 @@ export const formDataReactCodeState = selector<string>({
     const line1 = `import React, { memo } from 'react'`
     const depSet = new Set()
     formCompDataList.forEach((item) => {
-      depSet.add(item.component.name)
+      depSet.add(item.componentName)
     })
     const deps = Array.from(depSet)
     const line2 = `import { Form, ${deps.join(', ')} } from 'antd'\n`
@@ -84,7 +84,7 @@ export const formDataReactCodeState = selector<string>({
         name="${item.name}"
         rules={${JSON.stringify(item.formItemProps.rules)}}
       >
-        <${item.component.name} />
+        <${item.componentName} />
       </Form.Item>`
       )
       .join('\n')

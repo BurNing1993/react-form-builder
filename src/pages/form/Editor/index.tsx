@@ -2,16 +2,18 @@ import React, { memo } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { useRecoilValue } from 'recoil'
 import { Button, Form, notification, Space } from 'antd'
-import { DROP_TYPE } from '../store/types'
+import { DROP_TYPE, compMap } from '../store/types'
 import {
   formCompDataListState,
   formPropsState,
   activeFormItemIndexState,
 } from '../store/atom'
 import { formInitialValuesState } from '../store/selector'
-import { useSelectFormItem } from '../store/hooks'
+import { useSelectFormItem, useDeleteComp, useCopyComp } from '../store/hooks'
 import CodeModal from './CodeModal'
 import JSONModal from './JSONModal'
+import ImportJSONModal from './ImportJSONModal'
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
@@ -19,6 +21,8 @@ const Editor: React.FC = () => {
   const formProps = useRecoilValue(formPropsState)
   const initialValues = useRecoilValue(formInitialValuesState)
   const onSelectFormItem = useSelectFormItem()
+  const deleteComp = useDeleteComp()
+  const copyComp = useCopyComp()
   const onFinish = (values: any) => {
     console.log('Success:', values)
     notification.success({
@@ -32,6 +36,7 @@ const Editor: React.FC = () => {
       <Space className="h-10 w-full px-2 border-b border-gray-500">
         <CodeModal />
         <JSONModal />
+        <ImportJSONModal />
       </Space>
       <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
         {(provided, snapshot) => (
@@ -60,7 +65,7 @@ const Editor: React.FC = () => {
                         activeFormItemIndex === index
                           ? ' border-blue-400'
                           : 'border-transparent',
-                        'border p-2 rounded',
+                        'border p-2 rounded relative',
                       ].join(' ')}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -68,9 +73,28 @@ const Editor: React.FC = () => {
                         onSelectFormItem(index)
                       }}
                     >
+                      <Space className="absolute bottom-1 left-1 cursor-pointer">
+                        <Button
+                          danger
+                          title="删除"
+                          icon={<DeleteOutlined />}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            deleteComp(index)
+                          }}
+                        ></Button>
+                        <Button
+                          title="复制"
+                          icon={<CopyOutlined />}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            copyComp(index)
+                          }}
+                        ></Button>
+                      </Space>
                       <Form.Item label={comp.label} name={comp.name}>
                         {React.createElement(
-                          comp.component,
+                          compMap.get(comp.componentName)!,
                           comp.componentProps
                         )}
                       </Form.Item>
