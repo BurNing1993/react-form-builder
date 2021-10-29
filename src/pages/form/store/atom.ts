@@ -9,13 +9,19 @@ export const formCompDataListState = atom<CompData[]>({
 })
 
 // form props
-export const formPropsState = atom<FormProps & ExtraFormProps>({
+export const formPropsState = atom<FormProps>({
   key: 'formCompDataList',
   default: {
     size: 'middle',
     layout: 'horizontal',
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
+  },
+})
+
+export const formExtraPropsState = atom<ExtraFormProps>({
+  key: 'formExtraPropsState',
+  default: {
     showSubmitButton: false,
     formTitle: 'Form' + generateId(),
   },

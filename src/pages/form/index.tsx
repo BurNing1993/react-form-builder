@@ -1,29 +1,54 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { useParams } from 'react-router-dom'
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
+import { useParams, useHistory } from 'react-router-dom'
 import Component from './Component'
 import Editor from './Editor'
 import Property from './Property'
-import { formCompDataListState, activeFormItemIndexState } from './store/atom'
-import { useUniqueFormDataKey } from './store/hooks'
+import {
+  formCompDataListState,
+  activeFormItemIndexState,
+  formPropsState,
+  formExtraPropsState,
+} from './store/atom'
+import { useUniqueFormDataKey, useGetFormData } from './store/hooks'
 import { formCompList } from './store/types'
 
 const FormPage: React.FC = () => {
+  const history = useHistory()
   const setFormCompDataList = useSetRecoilState(formCompDataListState)
+  const resetFormCompDataList = useResetRecoilState(formCompDataListState)
+  const resetFormProps = useResetRecoilState(formPropsState)
+  const resetFormExtraProps = useResetRecoilState(formExtraPropsState)
   const [activeFormItemIndex, setActiveFormItemIndex] = useRecoilState(
     activeFormItemIndexState
   )
   const generateUniqueFormDataKey = useUniqueFormDataKey()
+  const getFormData = useGetFormData()
   const params = useParams<{ id: string }>()
 
   useEffect(() => {
     console.log('enter page param:id=', params.id)
     if (!params.id || params.id === 'new') {
-      setFormCompDataList([])
+      resetFormCompDataList()
+      resetFormProps()
+      resetFormExtraProps()
     } else {
+      const id = Number(params.id)
+      if (id) {
+        // getFormData(id)
+        console.log('getFormData')
+      } else {
+        history.replace('/f/new')
+      }
     }
-  }, [params, setFormCompDataList])
+  }, [
+    history,
+    params,
+    resetFormCompDataList,
+    resetFormExtraProps,
+    resetFormProps,
+  ])
 
   // TODO
   // useEffect(() => {

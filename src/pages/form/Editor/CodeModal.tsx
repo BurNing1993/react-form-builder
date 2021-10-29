@@ -2,13 +2,13 @@ import React, { memo, useEffect, useState } from 'react'
 import { Button, Modal } from 'antd'
 import MonacoEditor from 'react-monaco-editor'
 import { useRecoilValue } from 'recoil'
-import { formPropsState } from '../store/atom'
+import { formExtraPropsState } from '../store/atom'
 import { formDataReactCodeState } from '../store/selector'
 import { downloadBlob } from '../../../utils'
 import { DownloadOutlined } from '@ant-design/icons'
 
 const JSONModal: React.FC = () => {
-  const formProps = useRecoilValue(formPropsState)
+  const formExtraProps = useRecoilValue(formExtraPropsState)
   const formDataReactCode = useRecoilValue(formDataReactCodeState)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [code, setCode] = useState('')
@@ -20,7 +20,7 @@ const JSONModal: React.FC = () => {
   }
   const handleOk = () => {
     const blob = new Blob([code], { type: 'application/json	' })
-    downloadBlob(blob, `${formProps.formTitle}.jsx`)
+    downloadBlob(blob, `${formExtraProps.formTitle}.jsx`)
     setIsModalVisible(false)
   }
   useEffect(() => {
@@ -32,11 +32,11 @@ const JSONModal: React.FC = () => {
         Code
       </Button>
       <Modal
-        title={formProps.formTitle + '.jsx'}
+        title={formExtraProps.formTitle + '.jsx'}
         width="900px"
         visible={isModalVisible}
         onCancel={handleCancel}
-        okText={'export ' + formProps.formTitle + '.jsx'}
+        okText={'export ' + formExtraProps.formTitle + '.jsx'}
         onOk={handleOk}
       >
         <MonacoEditor

@@ -5,10 +5,13 @@ export type ComponentProps = InputProps
 
 // 组件map
 export const compMap = new Map<string, FormComponent>([['Input', Input]])
+export const iconMap = new Map<string, React.ForwardRefExoticComponent<{}>>([
+  ['Input', EditOutlined],
+])
 
 export interface CompProps {
   label: string
-  icon: React.ForwardRefExoticComponent<{}>
+  icon: string
   defaultValue: string
   formItemProps: FormItemProps
   componentName: string
@@ -27,10 +30,9 @@ export const ruleTypes = ['string', 'number', 'url', 'email']
 export interface ExtraFormProps {
   showSubmitButton: boolean
   formTitle: string
+  id?: number //for db
+  createAt?: number //for db
 }
-
-// img: 'https://via.placeholder.com/100x50.png?text=input',
-// TODO form item icon
 
 const commonFormProps: FormItemProps = {
   rules: [
@@ -45,7 +47,7 @@ export const formCompList: CompProps[] = [
   {
     label: 'Input',
     defaultValue: '',
-    icon: EditOutlined,
+    icon: 'Input',
     formItemProps: commonFormProps,
     componentName: 'Input',
     componentProps: {
@@ -58,4 +60,14 @@ export const formCompList: CompProps[] = [
 export interface FormData {
   formData: CompData[]
   formProps: FormProps & ExtraFormProps
+}
+
+export interface DBFormData {
+  id?: number
+  name: string
+  createAt: number
+  updateAt: number
+  compList: CompData[]
+  props: FormProps
+  extra: ExtraFormProps
 }

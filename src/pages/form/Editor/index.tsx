@@ -1,34 +1,52 @@
 import React, { memo } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { useRecoilValue } from 'recoil'
-import { Button, Form, notification, Space } from 'antd'
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button, Form, message, notification, Space } from 'antd'
 import { DROP_TYPE, compMap } from '../store/types'
 import {
   formCompDataListState,
   formPropsState,
+  formExtraPropsState,
   activeFormItemIndexState,
 } from '../store/atom'
 import { formInitialValuesState } from '../store/selector'
-import { useSelectFormItem, useDeleteComp, useCopyComp } from '../store/hooks'
+import {
+  useSelectFormItem,
+  useDeleteComp,
+  useCopyComp,
+  useSaveData,
+} from '../store/hooks'
 import CodeModal from './CodeModal'
 import JSONModal from './JSONModal'
 import ImportJSONModal from './ImportJSONModal'
-import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
   const activeFormItemIndex = useRecoilValue(activeFormItemIndexState)
   const formProps = useRecoilValue(formPropsState)
+  const formExtraProps = useRecoilValue(formExtraPropsState)
   const initialValues = useRecoilValue(formInitialValuesState)
   const onSelectFormItem = useSelectFormItem()
   const deleteComp = useDeleteComp()
   const copyComp = useCopyComp()
+  const saveData = useSaveData()
   const onFinish = (values: any) => {
     console.log('Success:', values)
     notification.success({
       message: '提交成功',
       description: JSON.stringify(values),
     })
+  }
+
+  const onSaveData = async () => {
+    try {
+      await saveData()
+      message.success('保存成功!')
+    } catch (error) {
+      console.error(error)
+      message.error('保存失败!')
+    }
   }
 
   return (
@@ -40,7 +58,9 @@ const Editor: React.FC = () => {
           <ImportJSONModal />
         </Space>
         <Space className="ml-auto">
-          <Button type="primary">保存</Button>
+          <Button type="primary" onClick={onSaveData}>
+            保存
+          </Button>
         </Space>
       </div>
       <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
@@ -107,7 +127,7 @@ const Editor: React.FC = () => {
                   )}
                 </Draggable>
               ))}
-              {formProps.showSubmitButton && !snapshot.isDraggingOver ? (
+              {formExtraProps.showSubmitButton && !snapshot.isDraggingOver ? (
                 <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
                   <Button type="primary" htmlType="submit">
                     Submit

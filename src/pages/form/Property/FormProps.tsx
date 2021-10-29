@@ -1,14 +1,16 @@
 import React, { memo } from 'react'
 import { useRecoilState } from 'recoil'
 import { Form, Input, Radio, Switch } from 'antd'
-import { formPropsState } from '../store/atom'
+import { formPropsState, formExtraPropsState } from '../store/atom'
 
 const FormProps: React.FC = () => {
   const [formProps, setFormProps] = useRecoilState(formPropsState)
+  const [formExtraProps, setFormExtraProps] =
+    useRecoilState(formExtraPropsState)
   return (
     <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
       <Form.Item label="Title">
-        <Input value={formProps.formTitle} disabled />
+        <Input value={formExtraProps.formTitle} disabled />
       </Form.Item>
       <Form.Item label="Size">
         <Radio.Group
@@ -34,9 +36,9 @@ const FormProps: React.FC = () => {
       </Form.Item>
       <Form.Item label="Submit">
         <Switch
-          checked={formProps.showSubmitButton}
+          checked={formExtraProps.showSubmitButton}
           onChange={(checked) =>
-            setFormProps({ ...formProps, showSubmitButton: checked })
+            setFormExtraProps({ ...formExtraProps, showSubmitButton: checked })
           }
         ></Switch>
       </Form.Item>

@@ -5,9 +5,11 @@ import {
   activeFormItemIndexState,
   formCompDataListState,
   formPropsState,
+  formExtraPropsState,
 } from './atom'
 import { generateId } from '../../../utils'
-import { CompData } from './types'
+import { saveForm, getFormDataById } from '../../../utils/db'
+import { CompData, DBFormData } from './types'
 
 // 生成唯一form key
 export function useUniqueFormDataKey() {
@@ -121,6 +123,50 @@ export function useCopyComp() {
 }
 
 export function useSaveData() {
-  const saveData = () => {}
-  return saveData()
+  const formCompDataList = useRecoilValue(formCompDataListState)
+  const formProps = useRecoilValue(formPropsState)
+  const [formExtraProps, setFormExtraProps] =
+    useRecoilState(formExtraPropsState)
+  const saveData = async () => {
+    try {
+      const data: DBFormData = {
+        id: formExtraProps.id,
+        name: formExtraProps.formTitle,
+        createAt: formExtraProps.createAt || Date.now(),
+        updateAt: Date.now(),
+        compList: formCompDataList,
+        props: formProps,
+        extra: formExtraProps,
+      }
+      const id = await saveForm(data)
+      if (!formProps.id) {
+        setFormExtraProps((props) => ({ ...props, id: id }))
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+  return saveData
+}
+
+export function useGetFormData() {
+  const setFormCompDataList = useSetRecoilState(formCompDataListState)
+  const setFormProps = useSetRecoilState(formPropsState)
+  const setFormExtraProps = useSetRecoilState(formExtraPropsState)
+  const setActiveFormItemIndex = useSetRecoilState(activeFormItemIndexState)
+  const getFormData = async (id: number) => {
+    const list = await getFormDataById(id)
+    if (list) {
+      const { compList, props, extra } = list
+      console.table(list)
+      setFormCompDataList(compList)
+      setFormProps(props)
+      setFormExtraProps(extra)
+      setActiveFormItemIndex(0)
+      return list
+    } else {
+      throw Error('No Data!')
+    }
+  }
+  return getFormData
 }

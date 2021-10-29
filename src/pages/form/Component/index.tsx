@@ -1,7 +1,7 @@
 import { Card } from 'antd'
 import React, { memo } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { formCompList, DROP_TYPE } from '../store/types'
+import { formCompList, DROP_TYPE, iconMap } from '../store/types'
 
 const Component: React.FC = () => {
   return (
@@ -34,7 +34,7 @@ const Component: React.FC = () => {
                         className="p-2 border border-transparent hover:border-gray-500"
                       >
                         <div className="flex justify-around items-center">
-                          {React.createElement(comp.icon)}
+                          {React.createElement(iconMap.get(comp.icon)!)}
                           <div className="text-center">{comp.label}</div>
                         </div>
                         <div className="absolute top-0 left-0 w-full h-full opacity-50"></div>

@@ -1,10 +1,12 @@
 import { selector } from 'recoil'
+import { getFormList } from '../../../utils/db'
 import {
   formCompDataListState,
   activeFormItemIndexState,
   formPropsState,
+  formExtraPropsState,
 } from './atom'
-import { CompData } from './types'
+import { CompData, DBFormData } from './types'
 
 export const formCompDataListKeysState = selector<string[]>({
   key: 'formCompDataListKeysState',
@@ -54,6 +56,7 @@ export const formDataReactCodeState = selector<string>({
   get: ({ get }) => {
     const formCompDataList = get(formCompDataListState)
     const formProps = get(formPropsState)
+    const formExtraProps = get(formExtraPropsState)
     const formInitialValues = get(formInitialValuesState)
     const line1 = `import React, { memo } from 'react'`
     const depSet = new Set()
@@ -62,14 +65,14 @@ export const formDataReactCodeState = selector<string>({
     })
     const deps = Array.from(depSet)
     const line2 = `import { Form, ${deps.join(', ')} } from 'antd'\n`
-    const line3 = `const ${formProps.formTitle} = () => {  
+    const line3 = `const ${formExtraProps.formTitle} = () => {  
   const onFinish = (values) => {
     console.log('Success:', values)
   }
 
   return (`
     const line4 = `    <Form
-      name="${formProps.formTitle}"
+      name="${formExtraProps.formTitle}"
       size="${formProps.size}"
       layout="${formProps.layout}"
       labelCol={{ span: ${formProps.labelCol?.span} }}
@@ -88,7 +91,7 @@ export const formDataReactCodeState = selector<string>({
       </Form.Item>`
       )
       .join('\n')
-    const submitCode = formProps.showSubmitButton
+    const submitCode = formExtraProps.showSubmitButton
       ? `      <Form.Item wrapperCol={{ offset: ${
           formProps.labelCol?.span
         }, span: ${
@@ -107,10 +110,18 @@ export const formDataReactCodeState = selector<string>({
   )
 }
 
-export default memo(${formProps.formTitle})`
+export default memo(${formExtraProps.formTitle})`
 
     return [line1, line2, line3, line4, contentCode, submitCode, lastLine].join(
       '\n'
     )
+  },
+})
+
+export const formListState = selector<DBFormData[]>({
+  key: 'formListState',
+  get: async () => {
+    const list = await getFormList()
+    return list
   },
 })
