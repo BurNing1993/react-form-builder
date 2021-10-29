@@ -1,12 +1,15 @@
 import React, { memo } from 'react'
 import { useRecoilState } from 'recoil'
-import { Form, Radio, Switch } from 'antd'
+import { Form, Input, Radio, Switch } from 'antd'
 import { formPropsState } from '../store/atom'
 
 const FormProps: React.FC = () => {
   const [formProps, setFormProps] = useRecoilState(formPropsState)
   return (
     <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+      <Form.Item label="Title">
+        <Input value={formProps.formTitle} disabled />
+      </Form.Item>
       <Form.Item label="Size">
         <Radio.Group
           value={formProps.size}

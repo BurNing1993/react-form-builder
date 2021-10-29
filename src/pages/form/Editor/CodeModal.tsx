@@ -28,12 +28,7 @@ const JSONModal: React.FC = () => {
   }, [formDataReactCode])
   return (
     <>
-      <Button
-        type="primary"
-        onClick={showModal}
-        size="middle"
-        icon={<DownloadOutlined />}
-      >
+      <Button onClick={showModal} size="middle" icon={<DownloadOutlined />}>
         Code
       </Button>
       <Modal

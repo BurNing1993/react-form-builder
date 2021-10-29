@@ -33,11 +33,16 @@ const Editor: React.FC = () => {
 
   return (
     <section className="flex-1">
-      <Space className="h-10 w-full px-2 border-b border-gray-500">
-        <CodeModal />
-        <JSONModal />
-        <ImportJSONModal />
-      </Space>
+      <div className="h-10 flex items-center px-2 border-b border-gray-500">
+        <Space>
+          <CodeModal />
+          <JSONModal />
+          <ImportJSONModal />
+        </Space>
+        <Space className="ml-auto">
+          <Button type="primary">保存</Button>
+        </Space>
+      </div>
       <Droppable droppableId="droppable-editor" type={DROP_TYPE}>
         {(provided, snapshot) => (
           <div

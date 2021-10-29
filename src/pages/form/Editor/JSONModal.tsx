@@ -24,12 +24,7 @@ const JSONModal: React.FC = () => {
   }
   return (
     <>
-      <Button
-        type="primary"
-        onClick={showModal}
-        size="middle"
-        icon={<DownloadOutlined />}
-      >
+      <Button onClick={showModal} size="middle" icon={<DownloadOutlined />}>
         JSON
       </Button>
       <Modal

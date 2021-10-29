@@ -19,7 +19,11 @@ const FormPage: React.FC = () => {
 
   useEffect(() => {
     console.log('enter page param:id=', params.id)
-  }, [params])
+    if (!params.id || params.id === 'new') {
+      setFormCompDataList([])
+    } else {
+    }
+  }, [params, setFormCompDataList])
 
   // TODO
   // useEffect(() => {

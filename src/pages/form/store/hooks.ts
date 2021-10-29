@@ -119,3 +119,8 @@ export function useCopyComp() {
   }
   return copyComp
 }
+
+export function useSaveData() {
+  const saveData = () => {}
+  return saveData()
+}
