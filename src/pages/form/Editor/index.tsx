@@ -88,9 +88,9 @@ const Editor: React.FC = () => {
                       ref={provided.innerRef}
                       className={[
                         activeFormItemIndex === index
-                          ? ' border-blue-400'
-                          : 'border-transparent',
-                        'border p-2 rounded relative',
+                          ? 'border-blue-400'
+                          : 'border-gray-500 border-dashed',
+                        'border p-2 rounded relative mb-1',
                       ].join(' ')}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}

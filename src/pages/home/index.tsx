@@ -17,6 +17,7 @@ const Home: React.FC = () => {
             <Link
               to="/f/new"
               className="border border-gray-600  block cursor-pointer text-center py-6 hover:border-blue-600"
+              title="new form"
             >
               <span>new</span>
             </Link>
@@ -30,9 +31,10 @@ const Home: React.FC = () => {
               <Link
                 to={'/f/' + f.id}
                 className="border border-gray-600  block cursor-pointer text-center py-6 hover:border-blue-600"
+                title={'go No.' + f.id + ' ' + f.name}
               >
-                {f.id}
-                {f.name}
+                <div className="font-bold text-xl">No.{f.id}</div>
+                <div>{f.name}</div>
               </Link>
             </Col>
           ))}

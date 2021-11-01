@@ -1,54 +1,46 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { useParams, useHistory } from 'react-router-dom'
 import Component from './Component'
 import Editor from './Editor'
 import Property from './Property'
+import { formCompDataListState, activeFormItemIndexState } from './store/atom'
 import {
-  formCompDataListState,
-  activeFormItemIndexState,
-  formPropsState,
-  formExtraPropsState,
-} from './store/atom'
-import { useUniqueFormDataKey, useGetFormData } from './store/hooks'
+  useUniqueFormDataKey,
+  useGetFormData,
+  useResetFormData,
+} from './store/hooks'
 import { formCompList } from './store/types'
 
 const FormPage: React.FC = () => {
   const history = useHistory()
   const setFormCompDataList = useSetRecoilState(formCompDataListState)
-  const resetFormCompDataList = useResetRecoilState(formCompDataListState)
-  const resetFormProps = useResetRecoilState(formPropsState)
-  const resetFormExtraProps = useResetRecoilState(formExtraPropsState)
   const [activeFormItemIndex, setActiveFormItemIndex] = useRecoilState(
     activeFormItemIndexState
   )
   const generateUniqueFormDataKey = useUniqueFormDataKey()
+  const resetFormData = useResetFormData()
   const getFormData = useGetFormData()
   const params = useParams<{ id: string }>()
 
   useEffect(() => {
     console.log('enter page param:id=', params.id)
     if (!params.id || params.id === 'new') {
-      resetFormCompDataList()
-      resetFormProps()
-      resetFormExtraProps()
+      resetFormData()
     } else {
       const id = Number(params.id)
       if (id) {
-        // getFormData(id)
+        getFormData(id).catch((err) => {
+          console.error(err)
+          history.replace('/f/new')
+        })
         console.log('getFormData')
       } else {
         history.replace('/f/new')
       }
     }
-  }, [
-    history,
-    params,
-    resetFormCompDataList,
-    resetFormExtraProps,
-    resetFormProps,
-  ])
+  }, [getFormData, history, params, resetFormData])
 
   // TODO
   // useEffect(() => {

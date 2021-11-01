@@ -22,12 +22,13 @@ export function saveForm(data: DBFormData) {
   })
 }
 
+// TODO page
 export async function getFormList(offset = 0) {
   return db.transaction('r', db.form, async () => {
     const list = await db.form
       .orderBy('updateAt')
       .reverse()
-      .limit(3)
+      // .limit(3)
       .offset(offset)
       .toArray()
     return list

@@ -1,4 +1,10 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil'
 import { formCompDataListKeysState } from './selector'
 import {
   activeTabKeyState,
@@ -150,23 +156,38 @@ export function useSaveData() {
 }
 
 export function useGetFormData() {
-  const setFormCompDataList = useSetRecoilState(formCompDataListState)
-  const setFormProps = useSetRecoilState(formPropsState)
-  const setFormExtraProps = useSetRecoilState(formExtraPropsState)
-  const setActiveFormItemIndex = useSetRecoilState(activeFormItemIndexState)
-  const getFormData = async (id: number) => {
-    const list = await getFormDataById(id)
-    if (list) {
-      const { compList, props, extra } = list
-      console.table(list)
-      setFormCompDataList(compList)
-      setFormProps(props)
-      setFormExtraProps(extra)
-      setActiveFormItemIndex(0)
-      return list
-    } else {
-      throw Error('No Data!')
-    }
-  }
+  const getFormData = useRecoilCallback(
+    ({ set }) =>
+      async (id: number) => {
+        const list = await getFormDataById(id)
+        if (list) {
+          const { compList, props, extra } = list
+          console.table(list)
+          set(formCompDataListState, compList)
+          set(formPropsState, props)
+          set(formExtraPropsState, extra)
+          set(activeFormItemIndexState, 0)
+          return list
+        } else {
+          throw Error('No Data!')
+        }
+      },
+    []
+  )
   return getFormData
+}
+
+export function useResetFormData() {
+  const resetFormCompDataList = useResetRecoilState(formCompDataListState)
+  const resetFormProps = useResetRecoilState(formPropsState)
+  const setFormExtraProps = useSetRecoilState(formExtraPropsState)
+  const resetFormData = () => {
+    resetFormCompDataList()
+    resetFormProps()
+    setFormExtraProps({
+      showSubmitButton: false,
+      formTitle: 'Form' + generateId(), // reset formTitle 不更新
+    })
+  }
+  return resetFormData
 }
