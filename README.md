@@ -4,6 +4,4 @@
 
 ## TODO
 
-- editor
-- icon
-  
+- 完善component

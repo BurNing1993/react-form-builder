@@ -28,14 +28,15 @@ const FormPage: React.FC = () => {
     console.log('enter page param:id=', params.id)
     if (!params.id || params.id === 'new') {
       resetFormData()
+      console.log('resetFormData')
     } else {
       const id = Number(params.id)
       if (id) {
+        console.log('getFormData')
         getFormData(id).catch((err) => {
           console.error(err)
           history.replace('/f/new')
         })
-        console.log('getFormData')
       } else {
         history.replace('/f/new')
       }

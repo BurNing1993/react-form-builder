@@ -18,12 +18,13 @@ const db = new AppDatabase()
 export function saveForm(data: DBFormData) {
   return db.transaction('rw', db.form, async () => {
     const id = await db.form.put(data, data.id)
+    console.log(id, data.id)
     return id
   })
 }
 
 // TODO page
-export async function getFormList(offset = 0) {
+export async function getDBFormList(offset = 0) {
   return db.transaction('r', db.form, async () => {
     const list = await db.form
       .orderBy('updateAt')
@@ -37,4 +38,8 @@ export async function getFormList(offset = 0) {
 
 export function getFormDataById(id: number) {
   return db.form.get(id)
+}
+
+export function deleteFormById(id: number) {
+  return db.form.delete(id)
 }

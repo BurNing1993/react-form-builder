@@ -15,7 +15,7 @@ const Component: React.FC = () => {
           ref={provided.innerRef}
           style={{ backgroundColor: snapshot.isDraggingOver ? 'grey' : '' }}
           {...provided.droppableProps}
-          className="w-80 border-r border-gray-500 p-2"
+          className="w-80 border-r border-gray-200 dark:border-gray-700 p-2"
         >
           <Card title="表单组件" bordered={false} size="small">
             <div className="grid grid-cols-2">
@@ -31,7 +31,7 @@ const Component: React.FC = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="p-2 border border-transparent hover:border-gray-500"
+                        className="p-2 border border-transparent hover:border-gray-200 dark:border-gray-700"
                       >
                         <div className="flex justify-around items-center">
                           {React.createElement(iconMap.get(comp.icon)!)}

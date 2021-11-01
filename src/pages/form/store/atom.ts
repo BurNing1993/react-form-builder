@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { FormProps } from 'antd'
-import { CompData, ExtraFormProps } from './types'
+import { CompData, DBFormData, ExtraFormProps } from './types'
 import { generateId } from '../../../utils'
 
 export const formCompDataListState = atom<CompData[]>({
@@ -36,5 +36,18 @@ export const activeTabKeyState = atom<string>({
 // form item props
 export const activeFormItemIndexState = atom<number>({
   key: 'activeFormItemIndexState',
-  default: -1,
+  default: 0,
+})
+
+export const formListState = atom<DBFormData[]>({
+  key: 'formListState',
+  default: [],
+  // reset don't work
+  // default: selector({
+  //   key: 'formListStateInit',
+  //   get: async () => {
+  //     const list = await getFormList()
+  //     return list
+  //   },
+  // }),
 })

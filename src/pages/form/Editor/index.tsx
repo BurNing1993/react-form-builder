@@ -51,7 +51,7 @@ const Editor: React.FC = () => {
 
   return (
     <section className="flex-1">
-      <div className="h-10 flex items-center px-2 border-b border-gray-500">
+      <div className="h-10 flex items-center px-2 border-b border-gray-200 dark:border-gray-700">
         <Space>
           <CodeModal />
           <JSONModal />
@@ -89,7 +89,7 @@ const Editor: React.FC = () => {
                       className={[
                         activeFormItemIndex === index
                           ? 'border-blue-400'
-                          : 'border-gray-500 border-dashed',
+                          : 'border-gray-200 dark:border-gray-700 border-dashed',
                         'border p-2 rounded relative mb-1',
                       ].join(' ')}
                       {...provided.draggableProps}
@@ -98,25 +98,28 @@ const Editor: React.FC = () => {
                         onSelectFormItem(index)
                       }}
                     >
-                      <Space className="absolute bottom-1 left-1 cursor-pointer">
-                        <Button
-                          danger
-                          title="删除"
-                          icon={<DeleteOutlined />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            deleteComp(index)
-                          }}
-                        ></Button>
-                        <Button
-                          title="复制"
-                          icon={<CopyOutlined />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            copyComp(index)
-                          }}
-                        ></Button>
-                      </Space>
+                      {activeFormItemIndex === index && (
+                        <Space className="absolute bottom-1 left-1 cursor-pointer">
+                          <Button
+                            danger
+                            title="删除"
+                            icon={<DeleteOutlined />}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteComp(index)
+                            }}
+                          ></Button>
+                          <Button
+                            type="ghost"
+                            title="复制"
+                            icon={<CopyOutlined />}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              copyComp(index)
+                            }}
+                          ></Button>
+                        </Space>
+                      )}
                       <Form.Item label={comp.label} name={comp.name}>
                         {React.createElement(
                           compMap.get(comp.componentName)!,

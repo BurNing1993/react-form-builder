@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   return (
     <header
       id="header"
-      className="h-10 px-4 flex items-center justify-between w-full border-b border-gray-500"
+      className="h-10 px-4 flex items-center justify-between w-full border-b border-gray-200 dark:border-gray-700"
     >
       <Link to="/" className="flex items-center">
         <Image

@@ -12,9 +12,15 @@ import {
   formCompDataListState,
   formPropsState,
   formExtraPropsState,
+  formListState,
 } from './atom'
 import { generateId } from '../../../utils'
-import { saveForm, getFormDataById } from '../../../utils/db'
+import {
+  saveForm,
+  getFormDataById,
+  deleteFormById,
+  getDBFormList,
+} from '../../../utils/db'
 import { CompData, DBFormData } from './types'
 
 // 生成唯一form key
@@ -133,6 +139,7 @@ export function useSaveData() {
   const formProps = useRecoilValue(formPropsState)
   const [formExtraProps, setFormExtraProps] =
     useRecoilState(formExtraPropsState)
+  const resetFormList = useResetRecoilState(formListState)
   const saveData = async () => {
     try {
       const data: DBFormData = {
@@ -148,6 +155,7 @@ export function useSaveData() {
       if (!formProps.id) {
         setFormExtraProps((props) => ({ ...props, id: id }))
       }
+      resetFormList()
     } catch (error) {
       throw error
     }
@@ -157,19 +165,27 @@ export function useSaveData() {
 
 export function useGetFormData() {
   const getFormData = useRecoilCallback(
-    ({ set }) =>
+    ({ set, snapshot }) =>
       async (id: number) => {
-        const list = await getFormDataById(id)
-        if (list) {
-          const { compList, props, extra } = list
-          console.table(list)
-          set(formCompDataListState, compList)
-          set(formPropsState, props)
-          set(formExtraPropsState, extra)
-          set(activeFormItemIndexState, 0)
-          return list
-        } else {
-          throw Error('No Data!')
+        try {
+          const formExtraProps = await snapshot.getPromise(formExtraPropsState)
+          if (formExtraProps.id && formExtraProps.id === id) {
+            console.log(`Don't need fetch ${id}`)
+            return
+          }
+          const data = await getFormDataById(id)
+          if (data) {
+            console.table(data)
+            const { compList, props, extra, id } = data
+            set(formCompDataListState, compList)
+            set(formPropsState, props)
+            set(formExtraPropsState, { ...extra, id })
+            set(activeFormItemIndexState, 0)
+          } else {
+            throw Error('Data is undefined')
+          }
+        } catch (error) {
+          throw error
         }
       },
     []
@@ -178,16 +194,59 @@ export function useGetFormData() {
 }
 
 export function useResetFormData() {
-  const resetFormCompDataList = useResetRecoilState(formCompDataListState)
-  const resetFormProps = useResetRecoilState(formPropsState)
-  const setFormExtraProps = useSetRecoilState(formExtraPropsState)
-  const resetFormData = () => {
-    resetFormCompDataList()
-    resetFormProps()
-    setFormExtraProps({
-      showSubmitButton: false,
-      formTitle: 'Form' + generateId(), // reset formTitle 不更新
-    })
-  }
+  const resetFormData = useRecoilCallback(
+    ({ reset, set }) =>
+      () => {
+        reset(formCompDataListState)
+        reset(formPropsState)
+        set(formExtraPropsState, {
+          showSubmitButton: false,
+          formTitle: 'Form' + generateId(), // reset formTitle 不更新
+        })
+        reset(activeFormItemIndexState)
+      },
+    []
+  )
   return resetFormData
+}
+
+export function useDeleteForm() {
+  const resetFormData = useResetFormData()
+  const getFormList = useGetFormList()
+  const deleteForm = useRecoilCallback(
+    ({ snapshot }) =>
+      async (id: number) => {
+        try {
+          const formExtraProps = await snapshot.getPromise(formExtraPropsState)
+          if (formExtraProps.id && formExtraProps.id === id) {
+            resetFormData()
+          }
+          await deleteFormById(id)
+          // set(formListState, (list) => list.filter((item) => item.id !== id))
+          // reset(formListState)
+          getFormList()
+        } catch (error) {
+          throw error
+        }
+      },
+    [getFormList, resetFormData]
+  )
+  return deleteForm
+}
+
+export function useGetFormList() {
+  const getFormList = useRecoilCallback(
+    ({ set, reset }) =>
+      async () => {
+        try {
+          const list = await getDBFormList()
+          set(formListState, list)
+        } catch (error) {
+          console.error(error)
+          reset(formListState)
+        }
+      },
+    []
+  )
+  return getFormList
 }

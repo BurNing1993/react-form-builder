@@ -1,12 +1,11 @@
 import { selector } from 'recoil'
-import { getFormList } from '../../../utils/db'
 import {
   formCompDataListState,
   activeFormItemIndexState,
   formPropsState,
   formExtraPropsState,
 } from './atom'
-import { CompData, DBFormData } from './types'
+import { CompData } from './types'
 
 export const formCompDataListKeysState = selector<string[]>({
   key: 'formCompDataListKeysState',
@@ -115,13 +114,5 @@ export default memo(${formExtraProps.formTitle})`
     return [line1, line2, line3, line4, contentCode, submitCode, lastLine].join(
       '\n'
     )
-  },
-})
-
-export const formListState = selector<DBFormData[]>({
-  key: 'formListState',
-  get: async () => {
-    const list = await getFormList()
-    return list
   },
 })

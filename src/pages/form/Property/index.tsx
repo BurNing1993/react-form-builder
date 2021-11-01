@@ -12,7 +12,7 @@ const Property: React.FC = () => {
   return (
     <section
       id="property-container"
-      className="w-96 border-l border-gray-500 px-2"
+      className="w-96 border-l border-gray-200 dark:border-gray-700 px-2"
     >
       <Tabs
         activeKey={activeTabKey}
