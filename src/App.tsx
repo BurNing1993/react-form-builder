@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+import { Skeleton } from 'antd'
 import Home from './pages/home'
 import Header from './components/Header'
 
@@ -9,8 +10,7 @@ const App: React.FC = () => {
     <RecoilRoot>
       <BrowserRouter>
         <Header />
-        {/* TODO  skeleton */}
-        <Suspense fallback={<div>Loading</div>}>
+        <Suspense fallback={<Skeleton />}>
           <Switch>
             <Route path="/" exact component={Home} />
             <Route

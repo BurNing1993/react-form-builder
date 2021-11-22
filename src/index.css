@@ -11,3 +11,7 @@
   width: 115px;
   text-align: center;
 }
+
+#droppable-editor {
+  min-height: calc(100vh - 80px);
+}

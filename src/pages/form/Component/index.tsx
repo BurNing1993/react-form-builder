@@ -1,7 +1,7 @@
-import { Card, Divider } from 'antd'
+import { Card } from 'antd'
 import React, { memo } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { formCompList, DROP_TYPE } from '../store/types'
+import { formCompList, DROP_TYPE, iconMap } from '../store/types'
 
 const Component: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const Component: React.FC = () => {
         <section
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="w-80 border-r border-gray-500 p-2"
+          className="w-80 border-r border-gray-200 dark:border-gray-700 p-2"
         >
           <Card title="表单组件" bordered={false} size="small">
             <div className="grid grid-cols-2">
@@ -30,13 +30,13 @@ const Component: React.FC = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="flex flex-col items-center cursor-pointer border border-transparent hover:border-gray-500"
+                        className="p-2 border border-transparent hover:border-gray-200 dark:border-gray-700"
                       >
-                        <div>{comp.label}</div>
-                        <img src={comp.img} alt={comp.label} />
-                        <div>
-                          <div>+</div>
+                        <div className="flex justify-around items-center">
+                          {React.createElement(iconMap.get(comp.icon)!)}
+                          <div className="text-center">{comp.label}</div>
                         </div>
+                        <div className="absolute top-0 left-0 w-full h-full opacity-50"></div>
                       </div>
                     )}
                   </Draggable>

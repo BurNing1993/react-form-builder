@@ -1,17 +1,25 @@
 import React, { memo } from 'react'
 import { Tabs } from 'antd'
+import { useRecoilState } from 'recoil'
 import CompProps from './CompProps'
 import FormProps from './FormProps'
+import { activeTabKeyState } from '../store/atom'
 
 const { TabPane } = Tabs
 
 const Property: React.FC = () => {
+  const [activeTabKey, setActiveTabKey] = useRecoilState(activeTabKeyState)
   return (
     <section
       id="property-container"
-      className="w-80 border-l border-gray-500 p-2"
+      className="w-96 border-l border-gray-200 dark:border-gray-700 px-2"
     >
-      <Tabs defaultActiveKey="1" type="card" centered>
+      <Tabs
+        activeKey={activeTabKey}
+        type="card"
+        centered
+        onChange={setActiveTabKey}
+      >
         <TabPane tab="表单设置" key="1">
           <FormProps />
         </TabPane>
