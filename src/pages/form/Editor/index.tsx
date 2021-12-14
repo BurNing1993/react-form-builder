@@ -3,7 +3,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { useRecoilValue } from 'recoil'
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Button, Form, message, notification, Space } from 'antd'
-import { DROP_TYPE, compMap } from '../store/types'
+import { DROP_TYPE, compMap, CompData } from '../store/types'
 import {
   formCompDataListState,
   formPropsState,
@@ -47,6 +47,14 @@ const Editor: React.FC = () => {
       console.error(error)
       message.error('保存失败!')
     }
+  }
+
+  const getComponent = (comp: CompData) => {
+    console.log(comp)
+    return React.createElement(
+      compMap.get(comp.componentName)!,
+      comp.componentProps
+    )
   }
 
   return (
@@ -121,10 +129,7 @@ const Editor: React.FC = () => {
                         </Space>
                       )}
                       <Form.Item label={comp.label} name={comp.name}>
-                        {React.createElement(
-                          compMap.get(comp.componentName)!,
-                          comp.componentProps
-                        )}
+                        {getComponent(comp)}
                       </Form.Item>
                     </div>
                   )}

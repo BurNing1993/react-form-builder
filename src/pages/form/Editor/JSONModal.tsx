@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, message, Modal } from 'antd'
 import MonacoEditor from 'react-monaco-editor'
 import { DownloadOutlined } from '@ant-design/icons'
 import { useRecoilValue } from 'recoil'
@@ -22,6 +22,19 @@ const JSONModal: React.FC = () => {
     downloadBlob(blob, `${formExtraProps.formTitle}.json`)
     setIsModalVisible(false)
   }
+
+  const copyCode = () => {
+    navigator.clipboard
+      .writeText(JSONCode)
+      .then(() => {
+        message.success('复制成功')
+      })
+      .catch((err) => {
+        console.error(err)
+        message.success('复制失败')
+      })
+  }
+
   return (
     <>
       <Button onClick={showModal} size="middle" icon={<DownloadOutlined />}>
@@ -32,8 +45,17 @@ const JSONModal: React.FC = () => {
         width="900px"
         visible={isModalVisible}
         onCancel={handleCancel}
-        okText="export JSON"
-        onOk={handleOk}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            export JSON
+          </Button>,
+          <Button key="primary" type="primary" onClick={copyCode}>
+            Copy Code
+          </Button>,
+        ]}
       >
         <MonacoEditor
           width="800"

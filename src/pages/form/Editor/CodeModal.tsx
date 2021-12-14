@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, message, Modal } from 'antd'
 import MonacoEditor from 'react-monaco-editor'
 import { useRecoilValue } from 'recoil'
 import { formExtraPropsState } from '../store/atom'
@@ -23,6 +23,19 @@ const JSONModal: React.FC = () => {
     downloadBlob(blob, `${formExtraProps.formTitle}.jsx`)
     setIsModalVisible(false)
   }
+
+  const copyCode = () => {
+    navigator.clipboard
+      .writeText(code)
+      .then(() => {
+        message.success('复制成功')
+      })
+      .catch((err) => {
+        console.error(err)
+        message.success('复制失败')
+      })
+  }
+
   useEffect(() => {
     setCode(formDataReactCode)
   }, [formDataReactCode])
@@ -35,9 +48,19 @@ const JSONModal: React.FC = () => {
         title={formExtraProps.formTitle + '.jsx'}
         width="900px"
         visible={isModalVisible}
-        onCancel={handleCancel}
         okText={'export ' + formExtraProps.formTitle + '.jsx'}
-        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            {'export ' + formExtraProps.formTitle + '.jsx'}
+          </Button>,
+          <Button key="primary" type="primary" onClick={copyCode}>
+            Copy Code
+          </Button>,
+        ]}
       >
         <MonacoEditor
           width="800"
