@@ -1,17 +1,31 @@
-import { Input, InputProps, FormItemProps, FormProps, Select } from 'antd'
+import {
+  Input,
+  InputProps,
+  FormItemProps,
+  FormProps,
+  Select,
+  SelectProps,
+} from 'antd'
 import { EditOutlined } from '@ant-design/icons'
-export type FormComponent = typeof Input
-export type ComponentProps = InputProps
+
+export type FormComponent = typeof Input | typeof Select
+export type ComponentProps = InputProps | SelectProps<any>
 
 export type FormComponentName = 'Input' | 'Select'
 // 组件map
-export const compMap = new Map<FormComponentName, FormComponent>([
+export const compMap = new Map<FormComponentName, any>([
   ['Input', Input],
+  ['Select', Select],
 ])
 export const iconMap = new Map<string, React.ForwardRefExoticComponent<{}>>([
   ['Input', EditOutlined],
   ['Select', EditOutlined],
 ])
+
+interface Option {
+  label: string
+  value: string
+}
 
 export interface CompProps {
   label: string
@@ -20,6 +34,7 @@ export interface CompProps {
   formItemProps: FormItemProps
   componentName: FormComponentName
   componentProps?: ComponentProps
+  options?: Option[]
 }
 
 export interface CompData extends CompProps {
@@ -67,7 +82,9 @@ export const formCompList: CompProps[] = [
     componentName: 'Select',
     componentProps: {
       placeholder: 'Select',
+      allowClear: false,
     },
+    options: [],
   },
 ]
 

@@ -1,9 +1,20 @@
 import React, { memo } from 'react'
-import { Empty, Form, Card, Input, Checkbox, Divider, Select } from 'antd'
+import {
+  Empty,
+  Form,
+  Card,
+  Input,
+  Checkbox,
+  Divider,
+  Select,
+  Button,
+  Space,
+} from 'antd'
 import { useRecoilValue } from 'recoil'
 import { activeFormItemState } from '../store/selector'
 import { useUpdateFormItemProps } from '../store/hooks'
 import { ruleTypes } from '../store/types'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 
 const { Option } = Select
 
@@ -40,6 +51,18 @@ const CompProps: React.FC = () => {
               />
             </Form.Item>
             {/* TODO Form.List onValuesChange*/}
+            {/* modal */}
+            {/* {activeFormItem.options && (
+              <>
+                <Form.Item label="Option">
+                </Form.Item>
+                <Form.Item labelCol={{ span: 0 }} wrapperCol={{ span: 24}}>
+                  <Button type="dashed" block icon={<PlusOutlined />}>
+                    Add Option
+                  </Button>
+                </Form.Item>
+              </>
+            )} */}
             <Divider>校验</Divider>
             <Form.Item label="必填">
               <Checkbox>必填</Checkbox>
@@ -65,7 +88,9 @@ const CompProps: React.FC = () => {
           </Card>
           <Card size="small" title="CompProps" className="mt-2">
             <Form.Item label="placeholder">
-              <Input value={activeFormItem.componentProps?.placeholder} />
+              <Input
+                value={activeFormItem.componentProps?.placeholder as string}
+              />
             </Form.Item>
           </Card>
         </Form>

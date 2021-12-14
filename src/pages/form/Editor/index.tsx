@@ -2,7 +2,15 @@ import React, { memo } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { useRecoilValue } from 'recoil'
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Button, Form, message, notification, Space } from 'antd'
+import {
+  Button,
+  Form,
+  InputProps,
+  message,
+  notification,
+  Space,
+  Select,
+} from 'antd'
 import { DROP_TYPE, compMap, CompData } from '../store/types'
 import {
   formCompDataListState,
@@ -20,6 +28,7 @@ import {
 import CodeModal from './CodeModal'
 import JSONModal from './JSONModal'
 import ImportJSONModal from './ImportJSONModal'
+import { SelectProps } from 'rc-select'
 
 const Editor: React.FC = () => {
   const formCompDataList = useRecoilValue(formCompDataListState)
@@ -50,10 +59,22 @@ const Editor: React.FC = () => {
   }
 
   const getComponent = (comp: CompData) => {
-    console.log(comp)
+    if (comp.componentName === 'Select') {
+      React.createElement(
+        compMap.get(comp.componentName)!,
+        comp.componentProps as SelectProps,
+        comp.options!.map((option) =>
+          React.createElement(Select.Option, {
+            key: option.value,
+            value: option.value,
+            children: option.label,
+          })
+        )
+      )
+    }
     return React.createElement(
       compMap.get(comp.componentName)!,
-      comp.componentProps
+      comp.componentProps as InputProps
     )
   }
 
